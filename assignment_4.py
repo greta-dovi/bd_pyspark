@@ -20,7 +20,7 @@ vessels = spark.read.option("header", "true").option("inferSchema", "true")\
 
 
 # Ensure that the data types for latitude, longitude, and timestamp are appropriate for calculations and sorting.
-sub_vessels = vessels.select("MMSI", "# Timestamp", "Latitude", "Longitude", )
+sub_vessels = vessels.select("MMSI", "# Timestamp", "Latitude", "Longitude")
 
 sub_vessels = sub_vessels.withColumn("date_time", F.to_timestamp("# Timestamp", "dd/MM/yyyy HH:mm:ss"))
 sub_vessels = sub_vessels.filter(F.abs(sub_vessels.Latitude) < 90)
@@ -32,8 +32,9 @@ sub_vessels.printSchema()
 # Calculate the distance between consecutive positions for each vessel using a suitable geospatial library or custom function that can integrate with PySpark.
 # Aggregate these distances by MMSI to get the total distance traveled by each vessel on that day.
 
-# Example
 def geodesic_dist(lat1, lon1, lat2, lon2):
+    if None in (lat1, lon1, lat2, lon2):
+        return 0.0
     return geodesic((lat1, lon1), (lat2, lon2)).kilometers
 
 geodesic_udf = F.udf(geodesic_dist, DoubleType())
@@ -47,7 +48,6 @@ sub_vessels = sub_vessels.withColumn("distance_kilometers", geodesic_udf("Latitu
                                                                      "Longitude",
                                                                      "lag_latitude",
                                                                      "lag_longitude"))
-sub_vessels.show()
 
 # Identifying the Longest Route
 # Sort or use an aggregation function to determine which vessel traveled the longest distance.
