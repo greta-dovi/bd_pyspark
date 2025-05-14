@@ -1,6 +1,11 @@
+import os
+import sys
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as func
 from pyspark.sql.types import StructType, StructField, IntegerType, FloatType
+
+os.environ['PYSPARK_PYTHON'] = sys.executable
+os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
 
 spark = SparkSession.builder.appName("TotalSpentByCustomer").master("local[*]").getOrCreate()
 
@@ -12,7 +17,7 @@ customerOrderSchema = StructType([ \
                                   ])
 
 # Load up the data into spark dataset
-customersDF = spark.read.schema(customerOrderSchema).csv("file:///SparkCourse/customer-orders.csv")
+customersDF = spark.read.schema(customerOrderSchema).csv("examples/customer-orders.csv")
 
 totalByCustomer = customersDF.groupBy("cust_id").agg(func.round(func.sum("amount_spent"), 2) \
                                       .alias("total_spent"))
