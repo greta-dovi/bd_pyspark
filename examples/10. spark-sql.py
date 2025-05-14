@@ -1,5 +1,10 @@
+import os
+import sys
 from pyspark.sql import SparkSession
 from pyspark.sql import Row
+
+os.environ['PYSPARK_PYTHON'] = sys.executable
+os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
 
 spark = SparkSession.builder.appName("Spark SQL basic example").getOrCreate()
 

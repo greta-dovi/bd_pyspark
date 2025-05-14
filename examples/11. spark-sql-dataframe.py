@@ -1,9 +1,14 @@
+import os
+import sys
 from pyspark.sql import SparkSession
+
+os.environ['PYSPARK_PYTHON'] = sys.executable
+os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
 
 spark = SparkSession.builder.appName("SparkSQL").getOrCreate()
 
 people = spark.read.option("header", "true").option("inferSchema", "true")\
-    .csv("file:///SparkVUlectures/fakefriends-header.csv")
+    .csv("fakefriends-header.csv")
     
 print("Here is our inferred schema:")
 people.printSchema()

@@ -1,4 +1,9 @@
+import os
+import sys
 from pyspark import SparkConf, SparkContext
+
+os.environ['PYSPARK_PYTHON'] = sys.executable
+os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
 
 conf = SparkConf().setMaster("local").setAppName("MaxTemperatures")
 sc = SparkContext(conf = conf)
@@ -12,12 +17,12 @@ def parseLine(line):
     return (stationID, entryType, temperature)
 
 
-lines = sc.textFile("file:///SparkVulectures/1800.csv")
+lines = sc.textFile("1800.csv")
 parsedLines = lines.map(parseLine)
 maxTemps = parsedLines.filter(lambda x: "TMAX" in x[1])
 stationTemps = maxTemps.map(lambda x: (x[0], x[2]))
 maxTemps = stationTemps.reduceByKey(lambda x, y: max(x,y))
-results = maxTemps.collect();
+results = maxTemps.collect()
 
 for result in results:
     print(result[0] + "\t{:.2f}C".format(result[1]))

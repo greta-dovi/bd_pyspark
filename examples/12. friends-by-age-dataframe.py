@@ -1,10 +1,15 @@
+import os
+import sys
 from pyspark.sql import SparkSession
-from pyspark.sql import Row
+# from pyspark.sql import Row
 from pyspark.sql import functions as func
+
+os.environ['PYSPARK_PYTHON'] = sys.executable
+os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
 
 spark = SparkSession.builder.appName("FriendsByAge").getOrCreate()
 
-lines = spark.read.option("header", "true").option("inferSchema", "true").csv("file:///SparkCourse/fakefriends-header.csv")
+lines = spark.read.option("header", "true").option("inferSchema", "true").csv("fakefriends-header.csv")
 
 # Select only age and numFriends columns
 friendsByAge = lines.select("age", "friends")

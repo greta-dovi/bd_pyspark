@@ -1,4 +1,9 @@
+import os
+import sys
 from pyspark import SparkConf, SparkContext
+
+os.environ['PYSPARK_PYTHON'] = sys.executable
+os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
 
 conf = SparkConf().setMaster("local").setAppName("MinTemperatures")
 sc = SparkContext(conf = conf)
@@ -11,7 +16,7 @@ def parseLine(line):
     return (stationID, entryType, temperature)
 
 
-lines = sc.textFile("file:///SparkVulectures/1800.csv")
+lines = sc.textFile("1800.csv")
 parsedLines = lines.map(parseLine)
 minTemps = parsedLines.filter(lambda x: "TMIN" in x[1])
 stationTemps = minTemps.map(lambda x: (x[0], x[2]))

@@ -1,4 +1,9 @@
+import os
+import sys
 from pyspark import SparkConf, SparkContext
+
+os.environ['PYSPARK_PYTHON'] = sys.executable
+os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
 
 conf = SparkConf().setMaster("local").setAppName("FriendsByAge")
 sc = SparkContext(conf=conf)
@@ -11,7 +16,7 @@ def parseLine(line):
     return age, numFriends
 
 
-lines = sc.textFile("file:///SparkVulectures/fakefriends.csv")
+lines = sc.textFile("fakefriends.csv")
 rdd = lines.map(parseLine)
 totalsByAge = rdd.mapValues(lambda x: (x, 1))
 print(totalsByAge.collect())
