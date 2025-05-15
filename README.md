@@ -18,25 +18,16 @@ To calculate the distance between two consecutive coordinates, `geodesic` functi
 Additionally, to extract the consecutive coordinates from Spark dataframe, a lag function was applied over a window, which was grouped by unique MMSIs and sorted by date-time. 
 
 ##### Identifying the Longest Route
-Total travelled distance was calculated by grouping values based on their MMSI and summing the distances. The final results were sorted in descending order. <br>
-The 
-<!-- Tasks
+Total travelled distance was calculated by grouping values based on their MMSI and summing the distance differences. The final results were sorted in descending order. <br>
+The vessels that travelled the longest distance are given in the table below. Additional information about the vessel type was taken from marinetraffic.com. 
 
+| MMSI      | Km     | Vessel type | Comments |
+|-----------|--------|:-----------:|----------|
+| 2579999   | 67 136 |             |          |
+| 211866190 | 15 325 |             |          |
+| 111219516 | 13 889 |             |          |
+| 245286000 | 9348   |             |          |
+| 219005867 | 6568   |             |          |
 
-Data Processing with PySpark
-Calculate the distance between consecutive positions for each vessel using a suitable geospatial library or custom function that can integrate with PySpark.
-Aggregate these distances by MMSI to get the total distance traveled by each vessel on that day.
-
-Identifying the Longest Route
-Sort or use an aggregation function to determine which vessel traveled the longest distance.
-
-Output
-The final output should be the MMSI of the vessel that traveled the longest distance, along with the computed distance.
-
-Code Documentation and Comments
-Ensure the code is well-documented, explaining key PySpark transformations and actions used in the process.
-
-Deliverables
-A PySpark script that completes the task from loading to calculating and outputting the longest route.
-A brief report or set of comments within the code that discusses the findings and any interesting insights about the data or the computation process. -->
-Errors
+##### Limitations
+After inspecting the coordinates of the vessels that travelled the longest distance it was noticed that there are some inconsistencies with the locations. Some random location jumps appear (like one coordinate in Africa or similar), however, when trying to filter out the suspicious distances using `sub_vessels.filter(sub_vessels.distance_kilometers > 1000).show()` the TimeoutError persists. Unfortunately the solution wasn't found and some other means of filtering suspicious coordinates should be exmployed. 
