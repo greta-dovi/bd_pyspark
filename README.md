@@ -21,13 +21,13 @@ Additionally, to extract the consecutive coordinates from Spark dataframe, a lag
 Total travelled distance was calculated by grouping values based on their MMSI and summing the distance differences. The final results were sorted in descending order. <br>
 The vessels that travelled the longest distance are given in the table below. Additional information about the vessel type was taken from marinetraffic.com. 
 
-| MMSI      | Km     | Vessel type | Comments |
-|-----------|--------|:-----------:|----------|
-| 2579999   | 67 136 |             |          |
-| 211866190 | 15 325 |             |          |
-| 111219516 | 13 889 |             |          |
-| 245286000 | 9348   |             |          |
-| 219005867 | 6568   |             |          |
+| MMSI      | Km     |    Vessel type    | Comments                                           |
+|-----------|--------|:-----------------:|----------------------------------------------------|
+| 2579999   | 67 136 | Navigation Aid    | Base station, has coordinates in Poland and Sweden |
+| 211866190 | 15 325 | Passenger Ferry   | Has one coordinate near Caribbean Sea              |
+| 111219516 | 13 889 | Search and Rescue | A helicopter                                       |
+| 245286000 | 9348   | Tanker            | Has one coordinate in Nigeria                      |
+| 219005867 | 6568   | Fishing           | Has one coordinate in russia                       |
 
 ##### Limitations
-After inspecting the coordinates of the vessels that travelled the longest distance it was noticed that there are some inconsistencies with the locations. Some random location jumps appear (like one coordinate in Africa or similar), however, when trying to filter out the suspicious distances using `sub_vessels.filter(sub_vessels.distance_kilometers > 1000).show()` the TimeoutError persists. Unfortunately the solution wasn't found and some other means of filtering suspicious coordinates should be exmployed. 
+After inspecting the coordinates of the vessels that travelled the longest distance it was noticed that there are some inconsistencies with the locations. Some random location jumps appear (like one coordinate in Africa or similar), however, when trying to filter out the suspicious distances using `sub_vessels.filter(sub_vessels.distance_kilometers > 1000).show()` the TimeoutError persists. Unfortunately the solution wasn't found and some other means of filtering inconsistent coordinates should be explored. 
